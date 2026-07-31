@@ -254,6 +254,14 @@
     font-size: 10px;
   }
   .hero-meta div { color: var(--pale); }
+
+  /* Shadow link — the V of Vendée, unmarked. Only cursor: pointer gives it away. */
+  .secret-v {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    /* No hover treatment — stays typographically invisible. */
+  }
   @media (max-width: 720px) {
     .hero-meta { grid-template-columns: repeat(2, 1fr); row-gap: 24px; }
   }
@@ -671,7 +679,7 @@
       <div class="hero-meta reveal">
         <div>
           <span class="label"><span data-lang="fr">Siège</span><span data-lang="en">Based in</span></span>
-          Paris &nbsp;·&nbsp; Vendée
+          Paris &nbsp;·&nbsp; <a href="1793.html" class="secret-v" aria-label="1793">V</a>endée
         </div>
         <div>
           <span class="label"><span data-lang="fr">Vocation</span><span data-lang="en">Focus</span></span>
