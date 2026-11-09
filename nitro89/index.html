@@ -2279,9 +2279,9 @@ function goChampSel(){if(!race.demo)startRace(true);setState('champsel');}
 function startChamp(i){newGame(i);startStory(buildIntro(i),i,()=>{goLoad();});}
 let cars=[],items=[],parts=[],pops=[],cam={x:0,y:0},race={},raceStartP=null;
 const RUP_K=['eng','acc','tyr','tank','tur'];
-function rivalUp(id,lv){if(P&&P.rup&&P.rup[id]&&!P.free)return P.rup[id];const b=Math.max(0,lv)/3|0;return{eng:Math.min(5,b+(id===1?1:0)),acc:Math.min(5,b),tyr:Math.min(5,b),tank:Math.min(5,b>>1),tur:Math.min(3,b>>1)};}
-function rivalsShop(order){if(!P.rm)P.rm=[0,0,0,0];if(!P.rup)P.rup={1:{eng:1,acc:0,tyr:0,tank:0,tur:0},2:{eng:0,acc:0,tyr:0,tank:0,tur:0},3:{eng:0,acc:0,tyr:0,tank:0,tur:0}};const lvl=CHAMPS[P.champ].diff*2+P.race;P.rlog=[];
- order.forEach((id,pos)=>{if(id===0)return;let g=Math.round([500,300,180,80][pos]*(1+lvl*.15)*.5/10)*10;if(id===1)g=Math.round(g*1.25/10)*10;P.rm[id]+=g;});
+function rivalUp(id,lv){if(P&&P.rup&&P.rup[id]&&!P.free)return P.rup[id];const b=Math.max(0,lv)/3|0;return{eng:Math.min(5,b+1),acc:Math.min(5,b),tyr:Math.min(5,b),tank:Math.min(5,b>>1),tur:Math.min(3,b>>1)};}
+function rivalsShop(order){if(!P.rm)P.rm=[0,0,0,0];if(!P.rup)P.rup={1:{eng:1,acc:0,tyr:0,tank:0,tur:0},2:{eng:1,acc:0,tyr:0,tank:0,tur:0},3:{eng:1,acc:0,tyr:0,tank:0,tur:0}};const lvl=CHAMPS[P.champ].diff*2+P.race;P.rlog=[];
+ order.forEach((id,pos)=>{if(id===0)return;let g=Math.round([500,300,180,80][pos]*(1+lvl*.15)*.5/10)*10;g=Math.round(g*1.25/10)*10;P.rm[id]+=g;});
  const pr=k=>k==='eng'?3:k==='acc'?2:k==='tyr'?2:k==='tank'?1:1.3;
  for(const id of[1,2,3]){const u=P.rup[id],bought=[];for(let n=0;n<2;n++){const opts=RUP_K.filter(k=>u[k]<(k==='tur'?3:5));if(!opts.length)break;let t=0;for(const k of opts)t+=pr(k);let r=Math.random()*t,k=opts[0];for(const q of opts){r-=pr(q);if(r<0){k=q;break;}}const p=price(u[k]);if(P.rm[id]<p)break;P.rm[id]-=p;u[k]++;bought.push(k);}if(bought.length)P.rlog.push({id,b:bought});}}
 let demoChamp=1;function startRace(demo){const lvl=demo?2:CHAMPS[P.champ].diff*2+P.race,dv=DIFF[demo||P.diff==null?1:P.diff];chunks=new Map();WORLD_HORIZ=W>H*1.15;const wdc=demo?circuitWD(demoChamp,(demoChamp*3+1)%10):circuitWD(P.champ,P.race);(wdc.open?genOpen:genWorld)(Math.max(0,lvl+dv.lv),demo,wdc,demo?9000+demoChamp*31:P.champ*1000+P.race*37+11,demo?30:60+P.race*4);buildWorldTiles(WD.wd);buildRaceCars(demo?demoChamp:P.champ);if(dv.hc&&!demo){let n=0;WD.items=WD.items.filter(it=>it.t!=='fuel'||(n++%3)!==0);}if(!demo)raceStartP=JSON.parse(JSON.stringify(P));const N=WD.N,S0=WD.S0;items=WD.items;parts=[];pops=[];cars=[];
@@ -2289,7 +2289,7 @@ let demoChamp=1;function startRace(demo){const lvl=demo?2:CHAMPS[P.champ].diff*2
  for(let i=0;i<4;i++){const ci=order[i],[gi,ln]=grid[i],p=WD.pts[gi],nn=WD.nrm[gi];
   const c={id:ci,x:p[0]+nn[0]*ln,y:p[1]+nn[1]*ln,a:WD.tan[gi],vx:0,vy:0,steer:0,gas:0,brake:0,turboT:0,last:gi,done:false,fin:0,stuck:0,rev:0,lane:ln*.4,ai:demo||(MP.on?!MP.players[ci]:ci!==0),human:!demo&&MP.on&&!!MP.players[ci],remote:!demo&&MP.on&&MP.host&&!!MP.players[ci]&&ci!==MY,fuel:100,fuelMax:100,cons:1};
   if(!demo&&(MP.on?!!MP.players[ci]:ci===0)){const u=P.up;c.max=2.6+.18*u.eng;c.acc=.05+.01*u.acc;c.grip=.26+.03*u.tyr;c.fuelMax=100+20*u.tank;c.cons=(1-.08*u.tank)*dv.fuel;c.turbos=2+u.tur;c.turn=.05+.002*u.tyr;}
-  else{const lv=demo?2:lvl,u0=rivalUp(ci===0?2:ci,lv),u=dv.hc&&!demo?Object.fromEntries(Object.entries(u0).map(([k,v])=>[k,Math.min(k==='tur'?3:5,v+1)])):u0,bon=ci===1?.12:ci===2?.05:.02;c.max=Math.min(3.45,2.12+.065*lv+.1*u.eng)+bon;c.acc=.05+Math.min(.025,.003*lv)+.005*u.acc;c.grip=.24+.012*u.tyr;c.turbos=Math.min(4,(lv/3|0)+u.tur);c.turn=.066+.0015*u.tyr;c.fuelMax=100+20*u.tank;c.cons=(ci===1?.7:.74)*(1-.07*u.tank);c.skill=.3+Math.random()*.7;c.greed=.6+Math.random()*.8;if(!demo)c.max*=dv.ai;}
+  else{const lv=demo?2:lvl,u0=rivalUp(ci===0?2:ci,lv),u=dv.hc&&!demo?Object.fromEntries(Object.entries(u0).map(([k,v])=>[k,Math.min(k==='tur'?3:5,v+1)])):u0,bon=.12;c.max=Math.min(3.45,2.12+.065*lv+.1*u.eng)+bon;c.acc=.05+Math.min(.025,.003*lv)+.005*u.acc;c.grip=.24+.012*u.tyr;c.turbos=Math.min(4,(lv/3|0)+u.tur);c.turn=.066+.0015*u.tyr;c.fuelMax=100+20*u.tank;c.cons=.7*(1-.07*u.tank);c.skill=.3+Math.random()*.7;c.greed=.6+Math.random()*.8;if(!demo)c.max*=dv.ai;}
   c.fuel=c.fuelMax;cars.push(c);}
  race={demo,cd:demo?0:210,over:false,endT:0,out:false,outT:0,finCount:0,name:WD.wd.name,wd:WD.wd,free:!demo&&!!P.free,rt:0};
  const pl=player();cam.x=pl.x;cam.y=pl.y-40;
@@ -3435,7 +3435,8 @@ function mpLoadLib(cb){if(window.Peer){cb();return;}MP.status='CHARGEMENT DU RÉ
 function mpMe(){return{name:PCFG.name,car:playerCar()};}
 function mpBroadcast(m){for(const c of MP.conns){try{if(c.open)c.send(m);}catch(e){}}}
 function mpLobbyMsg(){return{t:'lobby',players:MP.players,ci:MP.ci,ri:MP.ri,diff:MP.diff,code:MP.code};}
-function mpHost(){mpLoadLib(()=>{const code=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.random()*32|0]).join('');let peer;try{peer=new Peer('nitro89-'+code);}catch(e){MP.status='ERREUR RÉSEAU';return;}MP.peer=peer;MP.status='CRÉATION DE LA PARTIE...';
+const MP_ICE={config:{iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},{urls:'stun:stun.cloudflare.com:3478'},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]}};
+function mpHost(){mpLoadLib(()=>{const code=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.random()*32|0]).join('');let peer;try{peer=new Peer('nitro89-'+code,MP_ICE);}catch(e){MP.status='ERREUR RÉSEAU';return;}MP.peer=peer;MP.status='CRÉATION DE LA PARTIE...';
  peer.on('open',()=>{MP.on=true;MP.host=true;MP.code=code;MP.slot=0;MY=0;MP.diff=diffSet;MP.players=[mpMe(),null,null,null];MP.status='';setState('lobby');});
  peer.on('error',e=>{if(e.type==='unavailable-id'){try{peer.destroy();}catch(_){}mpHost();return;}MP.status='ERREUR RÉSEAU : '+String(e.type||'').toUpperCase();});
  peer.on('connection',conn=>{conn.on('open',()=>{const slot=[1,2,3].find(i=>!MP.players[i]);if(!slot||state==='race'){try{conn.send({t:'full'});}catch(e){}setTimeout(()=>{try{conn.close();}catch(e){}},400);return;}
@@ -3445,9 +3446,12 @@ function mpDrop(conn){const i=MP.conns.indexOf(conn);if(i<0)return;MP.conns.spli
  if(state==='race'){const c=cars.find(q=>q.id===s);if(c){c.remote=false;c.human=false;c.ai=true;pop(player().x,player().y-30,(nm||'JOUEUR')+' PARTI','#ff9a5a');}}mpBroadcast(mpLobbyMsg());}
 function mpHostMsg(conn,m){if(!m||!m.t)return;if(m.t==='hello'){MP.players[conn.slot]={name:String(m.name||'JOUEUR').toUpperCase().slice(0,14),car:m.car||rivalCar(0,1)};mpBroadcast(mpLobbyMsg());}
  else if(m.t==='me'&&state==='race'){const c=cars.find(q=>q.id===conn.slot);if(!c||!c.remote)return;const v=m.s;c.sx=v[0];c.sy=v[1];c.sa=v[2];c.vx=v[3];c.vy=v[4];c.last=v[5];c.fuel=v[6];c.turbos=v[7];c.turboT=v[8];c.lvl=v[10];c.brake=v[11];if(c.gx===undefined){c.x=v[0];c.y=v[1];c.a=v[2];c.gx=1;}if(v[9]&&!c.done){c.done=true;c.fin=++race.finCount;}if(m.k)for(const i of m.k)if(items[i])items[i].alive=false;}}
-function mpJoin(code){mpLoadLib(()=>{let peer;try{peer=new Peer();}catch(e){MP.status='ERREUR RÉSEAU';return;}MP.peer=peer;MP.status='CONNEXION À '+code+'...';
- peer.on('open',()=>{const conn=peer.connect('nitro89-'+code,{reliable:true,serialization:'json'});MP.conn=conn;conn.on('open',()=>{conn.send(Object.assign({t:'hello'},mpMe()));});conn.on('data',mpGuestMsg);conn.on('close',mpLost);conn.on('error',mpLost);});
- peer.on('error',e=>{MP.status=e.type==='peer-unavailable'?'CODE INCONNU : '+code:'ERREUR RÉSEAU : '+String(e.type||'').toUpperCase();});});}
+function mpJoin(code){code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/O/g,'0').slice(0,4);mpLoadLib(()=>{if(MP.peer){try{MP.peer.destroy();}catch(e){}}let peer;try{peer=new Peer(undefined,MP_ICE);}catch(e){MP.status='ERREUR RÉSEAU';return;}MP.peer=peer;MP.joined=false;MP.status='CONNEXION À '+code+'...';
+ const fail=msg=>{if(MP.joined)return;MP.status=msg;try{peer.destroy();}catch(e){}MP.peer=null;};clearTimeout(MP.jt);MP.jt=setTimeout(()=>fail('CONNEXION IMPOSSIBLE · VÉRIFIE LE CODE OU METS LES 2 APPAREILS SUR LE MÊME WI-FI'),20000);
+ peer.on('open',()=>{MP.status='RECHERCHE DE LA PARTIE '+code+'...';const conn=peer.connect('nitro89-'+code,{reliable:true,serialization:'json'});MP.conn=conn;
+  setTimeout(()=>{try{const pc=conn.peerConnection;if(pc)pc.addEventListener('iceconnectionstatechange',()=>{const st=pc.iceConnectionState;if(st==='checking'&&!MP.joined)MP.status='LIAISON EN COURS...';if(st==='failed')fail('LIAISON BLOQUÉE PAR LE RÉSEAU · ESSAIE SUR LE MÊME WI-FI');});}catch(e){}},50);
+  conn.on('open',()=>{MP.joined=true;clearTimeout(MP.jt);conn.send(Object.assign({t:'hello'},mpMe()));});conn.on('data',mpGuestMsg);conn.on('close',mpLost);conn.on('error',mpLost);});
+ peer.on('error',e=>{fail(e.type==='peer-unavailable'?'CODE INCONNU : '+code+' · VÉRIFIE LE CODE AFFICHÉ SUR L\'HÔTE':'ERREUR RÉSEAU : '+String(e.type||'').toUpperCase());});});}
 function mpGuestMsg(m){if(!m||!m.t)return;
  if(m.t==='welcome'){MP.on=true;MP.host=false;MP.slot=m.slot;MY=m.slot;MP.code=m.code||'';MP.status='';setState('lobby');beep(880,.08);}
  else if(m.t==='full')MP.status='PARTIE COMPLÈTE OU DÉJÀ LANCÉE';
