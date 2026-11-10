@@ -2311,7 +2311,7 @@ function parisChampsBad(i,x,y,W2){if(i>=PCH.m0-14&&i<=PCH.m1+14)return true;for(
 function parisChampsGen(W2){if(!PCH._s){const d=PARIS.R.champs[0]-146;PCH.m0+=d;PCH.m1+=d;PCH.trucks=PCH.trucks.map(([i,sg])=>[i+d,sg]);PCH._s=1;}const N=W2.N,pts=W2.pts,nrm=W2.nrm,tan=W2.tan,hw=W2.hw,R=rng(8989);
  W2.pveh=[];W2.pman=[];
  const PR=PARIS.R,DN=[.6,1,1.5,2][(typeof P!=='undefined'&&P&&P.diff!=null)?P.diff:1]||1;W2.pdens=DN;
- W2.ptrucks=PCH.trucks.slice();W2.pworks=[];{const SG=[[PR.royale[0]+30,PR.avopera[1]-20],[PR.quai[0]+30,PR.quai[1]-30],[PR.esplanade[0]+30,PR.bdinvalides[1]-20],[PR.stgermain[0]+30,PR.stgermain[1]-40]];let sgn=1;for(const[a,b]of SG){for(let i=a;i<b;i+=Math.round(95/DN)+(R()*30|0)){if(i>=PR.passage[0]-20&&i<=PR.pont[1]+10)continue;W2.ptrucks.push([i,sgn]);sgn=-sgn;}const nw=Math.max(1,Math.round((b-a)/400*DN));for(let k=0;k<nw;k++){const i=a+Math.round((b-a)*(k+.5)/nw)+20;if(W2.ptrucks.some(([t])=>Math.abs(t-i)<20))continue;W2.pworks.push([i,R()<.5?1:-1]);}}}
+ W2.ptrucks=PCH.trucks.slice();W2.pworks=[];{const SG=[[PR.royale[0]+30,PR.avopera[1]-20],[PR.quai[0]+30,PR.quai[1]-30],[PR.esplanade[0]+30,PR.bdinvalides[1]-20],[PR.stgermain[0]+30,PR.stgermain[1]-40]];let sgn=1;for(const[a,b]of SG){for(let i=a;i<b;i+=Math.round(95/DN)+(R()*30|0)){if(i>=PR.passage[0]-20&&i<=PR.pont[1]+10)continue;W2.ptrucks.push([i,sgn]);sgn=-sgn;}const nw=Math.max(1,Math.round((b-a)/400*DN));for(let k=0;k<nw;k++){const i=a+Math.round((b-a)*(k+.5)/nw)+20;if(W2.ptrucks.some(([t])=>Math.abs(t-i)<20)||hw[i]<32)continue;W2.pworks.push([i,R()<.5?1:-1]);}}}
  for(const[i,sg]of W2.ptrucks){const lat=sg*(hw[i]-13),x=pts[i][0]+nrm[i][0]*lat,y=pts[i][1]+nrm[i][1]*lat,a=tan[i],c=Math.cos(a),s2=Math.sin(a);for(const o of[-15,-5,5,15])addColC(x+c*o,y+s2*o,9);
   W2.objs.push({t:'lm',k:'ptruck',x,y,a,sd:i,col:['#f4f4f0','#e8c020','#d03020','#2a5aa8'][i%4],lab:['LIVRAISON','EXPRESS','COLIS','FLEURS'][i%4],z:3,w:70,h:70,ox:-35,oy:-35});for(let k=i-20;k<=i+5;k++)W2.obs[k]=sg;}
  // fourgons CRS aux deux bouts de la manif
@@ -2322,7 +2322,7 @@ function parisChampsGen(W2){if(!PCH._s){const d=PARIS.R.champs[0]-146;PCH.m0+=d;
  // circulation
  const HC=hw[PARIS.R.champs[0]+200],lanes=[-.78,-.5,-.2,.2,.5,.78].map(v=>v*HC);for(let k=0;k<Math.round(13*DN);k++)W2.pveh.push({ty:k%4===3?'van':k%5===4?'taxi':'car',u:PARIS.R.champs[0]+29+k*600/Math.round(13*DN)+R()*20,sp:(1.5+R()*1.1)/6,base:lanes[k%6],lat:lanes[k%6],ph:R()*TAU,amp:8+R()*10,col:['#c02828','#2a2a30','#e8e8e8','#2a4a9a','#6a6a70','#1a6a4a'][R()*6|0],L:k%4===3?17:12,Wd:k%4===3?8:6.5});
  for(let k=0;k<7;k++){const sg=k%2?1:-1;W2.pveh.push({ty:k%3===2?'scoot':'bike',u:PARIS.R.champs[0]+44+k*85+R()*30,sp:(k%3===2?1.3:.75)/6,base:sg*(hw[PARIS.R.champs[0]+200]-3),lat:sg*(hw[PARIS.R.champs[0]+200]-3),ph:R()*TAU,amp:2,col:['#20a0c0','#e0a020','#c03080','#40a040'][k%4],L:6,Wd:3,down:0});}
- parisCityGen(W2,R,DN);W2.pobs0=W2.obs.slice(0);}
+ parisCityGen(W2,R,DN);W2.pveh=W2.pveh.filter(v=>v.ty==='bike'||v.ty==='scoot');W2.pobs0=W2.obs.slice(0);}
 function parisStep(){if(!WD||!WD.wd||!WD.wd._fp||!WD.pveh)return;const pts=WD.pts,nrm=WD.nrm,tan=WD.tan,hw=WD.hw,N=WD.N,go=race&&race.cd<=0;if(go)parisCityStep();
  const a0=PARIS.R.champs[0]+24,a1=PARIS.R.champs[1]-6;for(let k=0;k<=PARIS.R.bdinvalides[1]+4;k++)WD.obs[k]=WD.pobs0[k];
  const V=WD.pveh,heavy=v=>v.ty==='car'||v.ty==='taxi'||v.ty==='van';
