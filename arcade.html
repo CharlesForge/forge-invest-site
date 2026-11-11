@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#08080b" />
 <title>Forge — Arcade</title>
-<meta name="description" content="Forge Arcade — Nitro 89, Cassinity, Templier 3188 : des jeux à lancer directement dans le navigateur, sur mobile comme sur PC." />
+<meta name="description" content="Forge Arcade — Neptune, Le Manoir de Mortecouille, Céleste : Poussette de combat, Templier 3188, Nitro 89, Cassinity : des jeux à lancer directement dans le navigateur, sur mobile comme sur PC." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Cinzel:wght@700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400;1,9..144,600&family=Inter+Tight:wght@400;500;600;700&family=Monoton&family=Russo+One&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Limelight&family=Fredoka:wght@600;700&family=Orbitron:wght@700;900&family=Cinzel:wght@700;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400;1,9..144,600&family=Inter+Tight:wght@400;500;600;700&family=Monoton&family=Russo+One&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#08080b;
@@ -94,6 +94,24 @@
   .t-temp{font-family:"Cinzel",serif;font-weight:900;color:#efe3c6;letter-spacing:.06em;
     text-shadow:0 0 28px rgba(192,22,31,.55),0 2px 0 #5c0a0e;display:inline-flex;flex-direction:column;line-height:.9}
   .t-temp b{font-family:"Chakra Petch",sans-serif;font-weight:700;font-size:.5em;color:#ff3b30;letter-spacing:.5em;margin-top:.2em;text-shadow:0 0 16px rgba(255,48,48,.7)}
+  .t-nep{font-family:"Orbitron",sans-serif;font-weight:900;letter-spacing:.1em;color:#eafcff;display:inline-block;transform:skewX(-12deg);
+    text-shadow:0 0 18px rgba(46,200,255,.85),4px 4px 0 #ff2e6e}
+  .t-mort{font-family:"Limelight",serif;font-weight:400;color:#ecdcb0;letter-spacing:.02em;display:inline-flex;flex-direction:column;line-height:.95;
+    text-shadow:0 2px 0 #3a1a12,0 0 26px rgba(242,181,68,.28)}
+  .t-mort small{font-family:"Cinzel",serif;font-weight:700;font-size:.27em;letter-spacing:.42em;color:#d8b25a;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.8);margin-bottom:.25em}
+  .t-mort i{font-family:"Fraunces",serif;font-style:italic;font-weight:400;font-size:.26em;letter-spacing:.06em;color:#d8b25a;margin-top:.35em;text-shadow:0 2px 10px rgba(0,0,0,.8)}
+  .t-pous{font-family:"Fredoka",sans-serif;font-weight:700;color:#fff;display:inline-flex;flex-direction:column;line-height:.92;
+    text-shadow:0 0 20px rgba(255,126,182,.75),0 3px 0 #b0467f}
+  .t-pous em{font-family:"Fredoka",sans-serif;font-style:normal;font-weight:600;color:#ffd84a;font-size:.3em;letter-spacing:.08em;text-transform:uppercase;margin-top:.3em;white-space:nowrap;text-shadow:0 0 18px rgba(255,211,110,.5),0 2px 0 #6b3d1a}
+  .hero-title .t-nep{font-size:clamp(46px,7.4vw,100px)}
+  .hero-title .t-mort{font-size:clamp(44px,6.2vw,86px)}
+  .hero-title .t-pous{font-size:clamp(64px,8.6vw,118px)}
+  .poster .ptitle .t-nep{font-size:clamp(26px,2.3vw,34px)}
+  .poster .ptitle .t-mort{font-size:clamp(23px,2vw,30px)}
+  .poster .ptitle .t-pous{font-size:clamp(44px,3.8vw,56px)}
+  .m-head .t-nep{font-size:clamp(32px,5.6vw,60px)}
+  .m-head .t-mort{font-size:clamp(32px,5.2vw,56px)}
+  .m-head .t-pous{font-size:clamp(46px,7.4vw,80px)}
   .hero-title .t-nitro{font-size:clamp(46px,7vw,92px)}
   .hero-title .t-cass{font-size:clamp(56px,8vw,112px)}
   .hero-title .t-temp{font-size:clamp(46px,6.6vw,88px)}
@@ -104,12 +122,20 @@
   .row{padding:0 var(--gutter);margin-bottom:46px}
   .row h2{font-size:clamp(18px,1.6vw,22px);font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:10px}
   .row h2 .count{font-size:12px;font-weight:600;color:var(--ink-3);letter-spacing:.08em}
-  .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,1fr);gap:clamp(14px,2vw,28px);
+  .rail-wrap{position:relative}
+  .rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(232px,23vw,300px);gap:clamp(14px,2vw,28px);scroll-behavior:smooth;scroll-padding-left:4px;
         overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 4px 26px;margin:-10px -4px 0;scrollbar-width:none}
   .rail::-webkit-scrollbar{display:none}
-  @media (min-width:1100px){.rail{grid-auto-columns:1fr;overflow:visible}}
+  .arrow{position:absolute;top:0;bottom:16px;width:clamp(36px,3.6vw,56px);z-index:5;display:none;align-items:center;justify-content:center;color:var(--ink);
+         background:linear-gradient(90deg,rgba(8,8,11,.9),rgba(8,8,11,0));opacity:0;transition:opacity .25s ease}
+  .arrow.next{right:calc(-1*var(--gutter));background:linear-gradient(270deg,rgba(8,8,11,.92),rgba(8,8,11,0))}
+  .arrow.prev{left:calc(-1*var(--gutter))}
+  .arrow svg{width:34px;height:34px;transition:transform .2s var(--ease)}
+  .arrow:hover svg{transform:scale(1.25)}
+  @media (hover:hover){.arrow{display:flex}.rail-wrap:hover .arrow:not([disabled]){opacity:1}}
+  .arrow[disabled]{pointer-events:none}
   .slot{display:flex;align-items:flex-end;scroll-snap-align:start}
-  .rank{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:clamp(130px,13vw,210px);line-height:.72;letter-spacing:-.06em;
+  .rank{font-family:"Inter Tight",sans-serif;font-weight:700;font-size:clamp(120px,11vw,190px);line-height:.72;letter-spacing:-.06em;
         color:var(--bg);-webkit-text-stroke:3px rgba(244,242,238,.55);margin-right:-.14em;user-select:none;flex:none;position:relative;z-index:0}
   .poster{position:relative;z-index:1;flex:1;min-width:0;aspect-ratio:2/3;border-radius:8px;overflow:hidden;background:#111;
           box-shadow:0 18px 40px -18px rgba(0,0,0,.9);transition:transform .35s var(--ease),box-shadow .35s ease;outline:none;text-align:left;display:block;width:100%}
@@ -118,9 +144,9 @@
   .poster .f{position:absolute;top:12px;left:12px;z-index:2;font-family:"Fraunces",serif;font-weight:500;font-size:22px;color:#e7c56f;text-shadow:0 1px 6px rgba(0,0,0,.7)}
   .poster .badge{position:absolute;top:0;right:12px;z-index:2;background:#c0161f;color:#fff;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:10px 7px 6px;border-radius:0 0 4px 4px}
   .poster .ptitle{position:absolute;left:0;right:0;bottom:62px;z-index:2;text-align:center;padding:0 14px}
-  .poster .ptitle .t-nitro{font-size:clamp(34px,3.6vw,50px)}
-  .poster .ptitle .t-cass{font-size:clamp(40px,4.2vw,58px)}
-  .poster .ptitle .t-temp{font-size:clamp(32px,3.3vw,46px)}
+  .poster .ptitle .t-nitro{font-size:clamp(26px,2.4vw,36px)}
+  .poster .ptitle .t-cass{font-size:clamp(34px,3vw,46px)}
+  .poster .ptitle .t-temp{font-size:clamp(26px,2.4vw,36px)}
   .poster .tag{position:absolute;left:0;right:0;bottom:22px;z-index:2;text-align:center;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
   .poster .hover{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;gap:10px;
                  background:linear-gradient(0deg,rgba(6,6,9,.97) 0%,rgba(6,6,9,.9) 42%,rgba(6,6,9,.35) 70%,rgba(6,6,9,0) 100%);
@@ -201,7 +227,11 @@
 <main>
   <section class="row" id="affiche">
     <h2>À l'affiche <span class="count" id="count"></span></h2>
-    <div class="rail" id="rail"></div>
+    <div class="rail-wrap">
+      <button class="arrow prev" aria-label="Défiler vers la gauche" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="rail" id="rail"></div>
+      <button class="arrow next" aria-label="Défiler vers la droite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
   </section>
 
   <section class="row" id="univers">
@@ -224,6 +254,66 @@
    ============================================================ */
 const GAMES = [
   {
+    id: "neptune",
+    url: "neptune.html",
+    title: '<span class="t-nep">NEPTUNE</span>',
+    name: "Neptune",
+    genre: "Course anti-gravité",
+    tagline: "Vitesse terminale",
+    year: "2026",
+    badge: "Nouveauté",
+    short: "Trente circuits, six coupes, cinq machines. Inclinez l'iPhone pour piloter votre bolide anti-gravité, de Port Azur jusqu'au fond de la Fosse des Mariannes.",
+    long: [
+      "Lave qui vide votre énergie, verglas au bord du vide, mines sur la piste, tempêtes de sable et portes coulissantes. Chaque circuit a son piège, et la moindre sortie de piste se paie cher.",
+      "Rechargez-vous sur la bande rose, passez au garage entre deux courses et grimpez de coupe en coupe jusqu'au Trident de Neptune."
+    ],
+    feats: ["mobile", "pc", "solo"],
+    facts: { Genre: "Course anti-gravité 3D", Contenu: "30 circuits · 6 coupes · 5 machines", Commandes: "Inclinaison de l'iPhone, tactile ou clavier" },
+    univers: { label: "Envie de vitesse", sub: "Anti-gravité, boosts, sensations" },
+    accent: "#2ec8ff",
+    scene: neptuneScene
+  },
+  {
+    id: "mortecouille",
+    url: "mortecouille.html",
+    title: '<span class="t-mort"><small>Le Manoir de</small>Mortecouille<i>— une enquête —</i></span>',
+    name: "Le Manoir de Mortecouille",
+    genre: "Enquête criminelle",
+    tagline: "Quatre jours pour la vérité",
+    year: "2026",
+    badge: "Nouveauté",
+    short: "Mars 1952, près de Luçon. Le comte Barnabé de Mortecouille est mort d'une chute, dit-on. Sa nièce Hélène n'y croit pas et télégraphie au détective Brunet. Vous avez quatre jours.",
+    long: [
+      "Une comtesse en deuil, deux héritiers aux abois, un notaire trop aimable, un majordome qui voit tout et une bonne qui sursaute pour un rien. Chacun a ses heures, ses habitudes et ses secrets.",
+      "Fouillez les chambres sans vous faire surprendre, allumez votre lanterne pour descendre là où personne ne va et consignez tout dans votre carnet. Mais plus vous fouinez, plus la maisonnée se méfie."
+    ],
+    feats: ["mobile", "pc", "solo"],
+    facts: { Genre: "Enquête / whodunit", Ambiance: "Manoir vendéen, mars 1952", Inspiration: "Agatha Christie · Le Manoir de Mortevielle" },
+    univers: { label: "Envie d'enquêter", sub: "Indices, suspects, huis clos" },
+    accent: "#d8b25a",
+    scene: manoirScene
+  },
+  {
+    id: "poussette",
+    url: "poussette-celeste.html",
+    title: '<span class="t-pous">Céleste<em>Poussette de combat</em></span>',
+    name: "Céleste : Poussette de combat",
+    genre: "Shoot'em up",
+    tagline: "Dégagez le trottoir",
+    year: "2026",
+    badge: "Nouveauté",
+    short: "Céleste a décidé que la promenade se ferait à sa façon. Dans sa poussette de combat, elle se fraie un chemin à travers la rue, le supermarché, l'église, le square des nounous et le parc.",
+    long: [
+      "Un shoot'em up vertical où tout le quartier vous tire dessus : passants pressés, caddies fous, paroissiennes qui font « Chut ! » et nounous en patrouille. Ramassez les biberons pour gonfler votre tir, le doudou pour vous protéger, et gardez une sieste atomique pour les coups durs.",
+      "Au bout de chaque niveau, un boss vous attend, du Livreur Pressé au Caïd du Bac à Sable. Trois difficultés, de Tranquille à Infernal."
+    ],
+    feats: ["mobile", "pc", "solo"],
+    facts: { Genre: "Shoot'em up vertical", Contenu: "5 niveaux · 5 boss", Difficulté: "Tranquille · Normal · Infernal" },
+    univers: { label: "Envie de défouloir", sub: "Tir nourri, boss, poussette blindée" },
+    accent: "#ff4d6d",
+    scene: poussetteScene
+  },
+  {
     id: "nitro89",
     url: "nitro89/",
     title: '<span class="t-nitro">NITRO<em>89</em></span>',
@@ -231,14 +321,14 @@ const GAMES = [
     genre: "Course arcade",
     tagline: "Plein gaz, façon 16-bit",
     year: "2026",
-    short: "La course arcade rétro, hommage aux années Atari ST. Enchaînez les championnats, de la Vendée au Far West, et défiez un ami en duel.",
+    short: "Barils d'essence, liasses de billets et rivaux à la grande gueule. Pied au plancher, enchaînez les circuits de la Vendée au Far West et faites de votre voiture une vraie machine de course.",
     long: [
-      "Un hommage aux jeux de course 16-bit : vitesse pure, dérapages, nitro et rivaux aux répliques délicieusement kitsch.",
-      "Plus de dix championnats — Vendée, Soleil Levant, Grèce antique, Far West, Caraïbes, Safari, Médiéval… — chacun avec ses circuits et ses adversaires. Et un mode multijoueur pour affronter un ami en ligne."
+      "Vue de dessus, comme sur Atari ST. Ramassez les barils pour ne pas finir en panne sèche, raflez les billets et passez au garage entre deux courses pour améliorer votre voiture.",
+      "Plus de dix championnats vous attendent, du Soleil Levant aux Caraïbes, chacun avec ses pièges et son caïd local. Et quand vous serez prêt, défiez un ami en duel."
     ],
     feats: ["mobile", "pc", "multi"],
     facts: { Genre: "Course arcade rétro", Modes: "Championnats · Multijoueur à 2", Ambiance: "Synthwave, 1989" },
-    univers: { label: "Envie de vitesse", sub: "Courses courtes, adrénaline, rivalités" },
+    univers: { label: "Envie de rétro", sub: "Courses courtes, nitro, rivalités" },
     accent: "#ff2e88",
     scene: nitroScene
   },
@@ -250,10 +340,10 @@ const GAMES = [
     genre: "Quiz de géographie",
     tagline: "La carte, c'est vous",
     year: "2026",
-    short: "Placez villes, pays et États sur la carte, reconnaissez les drapeaux, retrouvez les numéros de départements — avec un quiz spécial Vendée.",
+    short: "Une ville s'affiche, vous posez le doigt sur la carte. Plus vous tombez près, plus vous marquez. Jusqu'où va votre sens de l'orientation ?",
     long: [
-      "Le jeu de géographie qui se joue au doigt : une ville, un pays ou un État s'affiche, touchez-le sur la carte. Plus vous êtes près, plus vous marquez.",
-      "QCM drapeaux, numéros de départements, États américains, et un quiz consacré aux villes de Vendée. Nommé en hommage aux Cassini, la dynastie de cartographes qui a levé la première carte de France."
+      "Choisissez votre terrain de jeu parmi une douzaine de régions du monde, des départements français aux États américains, sans oublier les villes de Vendée.",
+      "Reconnaissez les drapeaux, retrouvez les numéros de départements et battez votre record. Les Cassini ont mis un siècle à cartographier la France. Vous avez quelques secondes."
     ],
     feats: ["mobile", "pc", "solo"],
     facts: { Genre: "Quiz / carte", Modes: "Villes · Pays & États · Drapeaux · Départements · Vendée", Ambiance: "Cabinet de cartographe" },
@@ -269,11 +359,10 @@ const GAMES = [
     genre: "Shooter twin-stick",
     tagline: "Non nobis, Domine",
     year: "2026",
-    badge: "Nouveauté",
-    short: "Shooter médiéval-futuriste. Un templier en exosquelette face aux hordes de la Confrérie des Technoputes.",
+    short: "An 3188. La Terre sainte est tombée aux mains de la Confrérie des Technoputes et de ses hordes de morts enrubannés. Dans son exosquelette de combat, un templier se dresse seul face à la marée.",
     long: [
-      "Vue de dessus, deux sticks : l'un pour avancer, l'autre pour tirer au canon. Les hordes enrubannées déferlent, le templier tient la ligne.",
-      "Une campagne en cinq actes, du Gonfanon brisé au Sépulcre céleste, en passant par le siège de Jérusalem. Au doigt sur iPhone, ou à la manette sur PC avec touches configurables."
+      "Un stick pour avancer, l'autre pour faire feu. Ramassez les bonus qui démultiplient la puissance de votre canon et tenez la ligne sous les vagues d'assaut.",
+      "Sauvetages, sièges, courses contre la tempête. Cent niveaux en cinq actes vous mènent de Chypre à Jérusalem, puis jusqu'au Sépulcre céleste, sur la piste d'un secret qui touche votre propre famille."
     ],
     feats: ["mobile", "pad", "solo"],
     facts: { Genre: "Twin-stick shooter", Campagne: "5 actes", Ambiance: "Croisade, an 3188" },
@@ -282,6 +371,10 @@ const GAMES = [
     scene: templierScene
   }
 ];
+
+// Ordre d'affichage (affiches numérotées, carrousel)
+const ORDER = ["neptune","mortecouille","poussette","templier3188","nitro89","cassinity"];
+GAMES.sort((a,b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 
 /* ---------- Icônes ---------- */
 const I = {
@@ -525,6 +618,201 @@ function templierScene(p){
   return s;
 }
 
+
+/* ============ SCÈNE 4 — NEPTUNE (anti-gravité) ============ */
+function neptuneScene(p){
+  const r = rng(2077); let s = `<defs>
+    <linearGradient id="${p}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#01030f"/><stop offset=".5" stop-color="#06173f"/><stop offset="1" stop-color="#0e3470"/></linearGradient>
+    <radialGradient id="${p}pl" cx="1190" cy="190" r="300" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9fe2ff"/><stop offset=".45" stop-color="#3f86e6"/><stop offset="1" stop-color="#0b2768"/></radialGradient>
+    <linearGradient id="${p}trk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101a3c"/><stop offset="1" stop-color="#1f2f63"/></linearGradient>
+    <linearGradient id="${p}hull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#c9d4e6"/><stop offset="1" stop-color="#6c7896"/></linearGradient>
+    <clipPath id="${p}pc"><circle cx="1260" cy="250" r="215"/></clipPath>
+    <filter id="${p}glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <filter id="${p}big" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="34"/></filter>
+  </defs>`;
+  s += `<rect width="1600" height="900" fill="url(#${p}sky)"/>`;
+  for (let i=0;i<160;i++){ s += `<circle cx="${(r()*1600).toFixed(0)}" cy="${(r()*560).toFixed(0)}" r="${(.4+r()*1.4).toFixed(2)}" fill="#dff4ff" opacity="${(.2+r()*.75).toFixed(2)}"/>`; }
+  // Planète Neptune
+  s += `<circle cx="1260" cy="250" r="250" fill="#2e8cff" opacity=".45" filter="url(#${p}big)"/>`;
+  s += `<ellipse cx="1260" cy="262" rx="380" ry="56" fill="none" stroke="#9fe8ff" stroke-width="3" opacity=".35" transform="rotate(-14 1260 262)"/>`;
+  s += `<circle cx="1260" cy="250" r="215" fill="url(#${p}pl)"/>`;
+  s += `<g clip-path="url(#${p}pc)"><g opacity=".22" filter="url(#${p}glow)">`;
+  for (let k=0;k<7;k++){ s += `<ellipse cx="${1260+(r()-.5)*40}" cy="${120+k*45}" rx="${260}" ry="${8+r()*10}" fill="${k%2?'#bfeaff':'#1b4fae'}"/>`; }
+  s += `</g><ellipse cx="1180" cy="300" rx="34" ry="16" fill="#0a2a6e" opacity=".6" filter="url(#${p}glow)"/><circle cx="1260" cy="250" r="215" fill="none" stroke="#bfefff" stroke-width="10" opacity=".35" filter="url(#${p}glow)"/></g>`;
+  s += `<path d="M880 262 A380 56 0 0 0 1640 262" fill="none" stroke="#9fe8ff" stroke-width="5" opacity=".5" transform="rotate(-14 1260 262)"/>`;
+  // Piste suspendue dans le ciel
+  s += `<path d="M-40 470 C300 380 700 330 1000 360 C1250 385 1450 440 1660 520" fill="none" stroke="#14214a" stroke-width="30"/>`;
+  s += `<path d="M-40 455 C300 365 700 315 1000 345 C1250 370 1450 425 1660 505" fill="none" stroke="#2ec8ff" stroke-width="3" opacity=".9"/>`;
+  s += `<path d="M-40 485 C300 395 700 345 1000 375 C1250 400 1450 455 1660 535" fill="none" stroke="#ff2e6e" stroke-width="3" opacity=".8"/>`;
+  // Piste principale
+  const track = `M1180 520 C1060 600 820 690 700 900 L1720 900 C1560 700 1330 600 1240 520 Z`;
+  s += `<path d="${track}" fill="url(#${p}trk)"/>`;
+  s += `<g fill="none" stroke-linecap="round"><path d="M1180 520 C1060 600 820 690 700 900" stroke="#2ec8ff" stroke-width="10" filter="url(#${p}glow)"/><path d="M1240 520 C1330 600 1560 700 1720 900" stroke="#2ec8ff" stroke-width="10" filter="url(#${p}glow)"/>
+    <path d="M1180 520 C1060 600 820 690 700 900" stroke="#c9f4ff" stroke-width="3"/><path d="M1240 520 C1330 600 1560 700 1720 900" stroke="#c9f4ff" stroke-width="3"/></g>`;
+  s += `<g stroke="#fff" stroke-width="1.5" opacity=".18">`;
+  for (let i=0;i<18;i++){ const t=i/18; s += `<path d="M${1210+(-1+2*t)*12} 525 L${700+t*1020} 900" fill="none"/>`; }
+  s += `</g>`;
+  // Plaques d'accélération
+  for (const [y,w] of [[600,30],[660,46],[740,66]]){ const cx = 1212 + (y-520)*0.05; s += `<path d="M${cx-w} ${y} L${cx} ${y-w*.55} L${cx+w} ${y} L${cx+w} ${y+w*.35} L${cx} ${y-w*.2} L${cx-w} ${y+w*.35} Z" fill="#ff8a1e" opacity=".9"/>`; }
+  // Lignes de vitesse
+  for (let i=0;i<26;i++){ const a = (r()<.5? .15+r()*.9 : Math.PI-.15-r()*.9), d0 = 260+r()*200, d1 = d0+120+r()*260; const cx=1210, cy=520;
+    s += `<line x1="${cx+Math.cos(a)*d0}" y1="${cy+Math.sin(a)*d0*.6}" x2="${cx+Math.cos(a)*d1}" y2="${cy+Math.sin(a)*d1*.6}" stroke="#bfefff" stroke-width="${(1+r()*2).toFixed(1)}" opacity=".3"/>`; }
+  // Bolide (vue arrière)
+  s += `<g transform="translate(1200 768)">
+    <ellipse cx="0" cy="90" rx="190" ry="26" fill="#2ec8ff" opacity=".55" filter="url(#${p}glow)"/>
+    <path d="M-175 40 L-215 6 L-120 14 Z M175 40 L215 6 L120 14 Z" fill="#ff2e6e"/>
+    <path d="M-160 50 L-70 -36 L70 -36 L160 50 L118 72 L-118 72 Z" fill="url(#${p}hull)"/>
+    <path d="M-160 50 L160 50 L118 72 L-118 72 Z" fill="#3a4466"/>
+    <path d="M-120 22 L120 22" stroke="#ff2e6e" stroke-width="8"/>
+    <ellipse cx="0" cy="-30" rx="48" ry="22" fill="#2bd3ff" opacity=".85"/><ellipse cx="-12" cy="-36" rx="18" ry="7" fill="#fff" opacity=".55"/>
+    <path d="M-30 -36 L-12 -78 L12 -78 L30 -36 Z" fill="#c9d4e6"/>
+    <circle cx="-62" cy="58" r="22" fill="#7ff6ff" filter="url(#${p}glow)"/><circle cx="62" cy="58" r="22" fill="#7ff6ff" filter="url(#${p}glow)"/>
+    <circle cx="-62" cy="58" r="12" fill="#fff"/><circle cx="62" cy="58" r="12" fill="#fff"/>
+    <text x="0" y="12" text-anchor="middle" font-family="Orbitron, sans-serif" font-weight="900" font-size="20" fill="#0b1530">07</text>
+  </g>`;
+  return s;
+}
+
+/* ============ SCÈNE 5 — LE MANOIR DE MORTECOUILLE (enquête, années 30) ============ */
+function manoirScene(p){
+  const r = rng(1930); let s = `<defs>
+    <linearGradient id="${p}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1619"/><stop offset=".45" stop-color="#1c3134"/><stop offset=".78" stop-color="#4a3a33"/><stop offset="1" stop-color="#8a4a2c"/></linearGradient>
+    <linearGradient id="${p}stone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6f6550"/><stop offset=".5" stop-color="#b7a682"/><stop offset="1" stop-color="#5d5444"/></linearGradient>
+    <linearGradient id="${p}tower" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f483a"/><stop offset=".45" stop-color="#a3936f"/><stop offset="1" stop-color="#4a4336"/></linearGradient>
+    <linearGradient id="${p}slate" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b4650"/><stop offset="1" stop-color="#161c22"/></linearGradient>
+    <linearGradient id="${p}gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2420"/><stop offset="1" stop-color="#070a09"/></linearGradient>
+    <radialGradient id="${p}moon" cx="1420" cy="140" r="70" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fbf3d8"/><stop offset="1" stop-color="#d9cba0"/></radialGradient>
+    <filter id="${p}glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="7"/></filter>
+    <filter id="${p}big" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="36"/></filter>
+    <filter id="${p}soft" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>`;
+  s += `<rect width="1600" height="900" fill="url(#${p}sky)"/>`;
+  for (let i=0;i<60;i++){ s += `<circle cx="${(r()*1600).toFixed(0)}" cy="${(r()*300).toFixed(0)}" r="${(.4+r()*1).toFixed(2)}" fill="#fff" opacity="${(.15+r()*.45).toFixed(2)}"/>`; }
+  // Lune voilée
+  s += `<circle cx="1420" cy="140" r="120" fill="#e9dcb0" opacity=".25" filter="url(#${p}big)"/><circle cx="1420" cy="140" r="56" fill="url(#${p}moon)"/>`;
+  s += `<g fill="#1a2a2c" filter="url(#${p}soft)"><ellipse cx="1330" cy="170" rx="210" ry="26" opacity=".9"/><ellipse cx="1000" cy="120" rx="260" ry="22" opacity=".7"/><ellipse cx="600" cy="200" rx="320" ry="30" opacity=".6"/></g>`;
+  // Lisière d'arbres
+  let tl = 'M0 610 ';
+  for (let x=0;x<=1600;x+=40){ tl += `Q${x+20} ${560-r()*50} ${x+40} ${600-r()*20} `; }
+  s += `<path d="${tl} L1600 900 L0 900Z" fill="#101c1d"/>`;
+  // Peupliers
+  for (const [x,h] of [[930,330],[985,280],[1440,310],[1495,350],[380,300],[440,260]]) s += `<ellipse cx="${x}" cy="${600-h/2}" rx="${h*.09}" ry="${h/2}" fill="#0c1617"/>`;
+  // Sol
+  s += `<rect x="0" y="598" width="1600" height="302" fill="url(#${p}gnd)"/>`;
+  s += `<ellipse cx="1200" cy="660" rx="330" ry="50" fill="#3b3a33" opacity=".55"/>`;
+  // ----- Manoir -----
+  s += `<g>
+    <rect x="1104" y="270" width="18" height="70" fill="#8d7f62"/><rect x="1100" y="264" width="26" height="9" fill="#5c5446"/>
+    <rect x="1278" y="262" width="18" height="78" fill="#8d7f62"/><rect x="1274" y="256" width="26" height="9" fill="#5c5446"/>
+    <polygon points="1050,400 1104,300 1296,300 1350,400" fill="url(#${p}slate)"/>
+    <path d="M1104 300 H1296" stroke="#6a7682" stroke-width="2"/>
+    <rect x="1060" y="398" width="280" height="202" fill="url(#${p}stone)"/>
+    <rect x="1060" y="398" width="280" height="8" fill="#5c5446"/><rect x="1060" y="494" width="280" height="6" fill="#857a5f"/>
+    <rect x="1060" y="590" width="280" height="10" fill="#4a4336"/>
+  </g>`;
+  // Lucarnes
+  for (const x of [1135,1200,1265]) s += `<g><rect x="${x-14}" y="342" width="28" height="40" fill="#b3a27e"/><polygon points="${x-19},344 ${x},322 ${x+19},344" fill="#2a323a"/><rect x="${x-8}" y="350" width="16" height="26" fill="#1a1e22"/></g>`;
+  // Tours à toit en poivrière
+  for (const [x,w] of [[995,66],[1339,66]]){
+    s += `<rect x="${x}" y="372" width="${w}" height="228" fill="url(#${p}tower)"/><polygon points="${x-8},374 ${x+w/2},250 ${x+w+8},374" fill="url(#${p}slate)"/><path d="M${x-8} 374 H${x+w+8}" stroke="#5c5446" stroke-width="5"/>`;
+    s += `<rect x="${x+w/2-1.5}" y="222" width="3" height="32" fill="#151a1f"/>`;
+    s += `<path d="M${x+w/2-10} 470 L${x+w/2-10} 445 A10 10 0 0 1 ${x+w/2+10} 445 L${x+w/2+10} 470Z" fill="#1a1e22"/>`;
+  }
+  s += `<path d="M1028 230 L1046 236 L1028 242Z" fill="#151a1f"/>`;
+  // Fenêtres
+  const win = (x,y,lit) => {
+    let o = '';
+    if (lit) o += `<rect x="${x-6}" y="${y-6}" width="38" height="58" fill="#f2b544" opacity=".55" filter="url(#${p}glow)"/>`;
+    o += `<rect x="${x-7}" y="${y}" width="6" height="46" fill="#3b4a46"/><rect x="${x+27}" y="${y}" width="6" height="46" fill="#3b4a46"/>`;
+    o += `<rect x="${x}" y="${y}" width="26" height="46" fill="${lit? '#f2b544' : '#1a1e22'}" stroke="#d8c9a3" stroke-width="2"/>`;
+    o += `<path d="M${x+13} ${y} V${y+46} M${x} ${y+16} H${x+26} M${x} ${y+31} H${x+26}" stroke="${lit?'#7a4a18':'#3a3f44'}" stroke-width="1.6"/>`;
+    return o; };
+  const cols = [1078,1132,1186,1240,1294];
+  cols.forEach((x,i)=>{ s += win(x+1,420,i===3); });
+  cols.forEach((x,i)=>{ if (i!==2) s += win(x+1,526,i===0); });
+  // Silhouette derrière la fenêtre éclairée
+  s += `<g fill="#2a1408" opacity=".9"><circle cx="1254" cy="436" r="6"/><path d="M1245 466 Q1245 446 1254 444 Q1263 446 1263 466Z"/></g>`;
+  // Porte et perron
+  s += `<path d="M1186 590 L1186 548 A15 15 0 0 1 1216 548 L1216 590Z" fill="#2a1d14" stroke="#d8c9a3" stroke-width="2"/><rect x="1176" y="590" width="50" height="6" fill="#9a8c6c"/><rect x="1168" y="596" width="66" height="6" fill="#857a5f"/>`;
+  s += `<circle cx="1201" cy="534" r="5" fill="#f2b544" opacity=".8" filter="url(#${p}glow)"/>`;
+  // Automobile des années 30, phares allumés
+  s += `<g transform="translate(905 668)">
+    <path d="M60 30 L640 -20 L640 60 L60 52Z" fill="#f2d48a" opacity=".12" filter="url(#${p}soft)"/>
+    <path d="M-70 30 L-70 8 Q-66 -2 -40 -4 L-20 -4 L-6 -28 Q0 -34 14 -34 L52 -34 Q62 -34 66 -24 L74 -4 L104 -2 Q120 0 122 14 L124 30 Z" fill="#0c0f10"/>
+    <path d="M-2 -26 L12 -26 L12 -6 L-12 -6Z M18 -26 L54 -26 L62 -6 L18 -6Z" fill="#2a3a3c"/>
+    <circle cx="-38" cy="30" r="15" fill="#050606"/><circle cx="88" cy="30" r="15" fill="#050606"/><circle cx="-38" cy="30" r="6" fill="#4a4a44"/><circle cx="88" cy="30" r="6" fill="#4a4a44"/>
+    <circle cx="118" cy="8" r="7" fill="#ffe7a8"/><circle cx="118" cy="8" r="14" fill="#ffe7a8" opacity=".5" filter="url(#${p}glow)"/>
+  </g>`;
+  // Piliers du portail
+  for (const x of [900,1500]){
+    s += `<g><rect x="${x-26}" y="560" width="52" height="340" fill="#2d2a24"/><rect x="${x-26}" y="560" width="14" height="340" fill="#3d382f"/><rect x="${x-34}" y="548" width="68" height="16" fill="#3a352c"/>
+      <path d="M${x-16} 548 Q${x-20} 520 ${x} 512 Q${x+20} 520 ${x+16} 548Z" fill="#2d2a24"/><rect x="${x-4}" y="502" width="8" height="12" fill="#2d2a24"/></g>`;
+  }
+  // Corbeau
+  s += `<path d="M1504 500 q-6 -10 4 -16 q8 -4 12 4 l14 2 l-12 4 q-2 8 -12 8 q-8 0 -6 -2z" fill="#050606"/>`;
+  // Grille en fer forgé basse
+  s += `<g stroke="#0a0c0c" stroke-width="4">`;
+  for (let x=930;x<1475;x+=22) s += `<line x1="${x}" y1="${800}" x2="${x}" y2="900"/>`;
+  s += `<path d="M926 806 Q1200 770 1474 806" fill="none" stroke-width="6"/></g>`;
+  // Pluie fine
+  s += `<g stroke="#bcd0d0" stroke-width="1.2" opacity=".14">`;
+  for (let i=0;i<150;i++){ const x=r()*1700, y=r()*900; s += `<line x1="${x.toFixed(0)}" y1="${y.toFixed(0)}" x2="${(x-10).toFixed(0)}" y2="${(y+34).toFixed(0)}"/>`; }
+  s += `</g>`;
+  return s;
+}
+
+/* ============ SCÈNE 6 — CÉLESTE : POUSSETTE DE COMBAT ============ */
+function poussetteScene(p){
+  const r = rng(777); let s = `<defs>
+    <linearGradient id="${p}sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1f5c"/><stop offset=".5" stop-color="#9a4a8c"/><stop offset=".85" stop-color="#ff9a6b"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+    <linearGradient id="${p}road" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2f52"/><stop offset="1" stop-color="#16121f"/></linearGradient>
+    <filter id="${p}glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="${p}big" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>`;
+  s += `<rect width="1600" height="900" fill="url(#${p}sky)"/>`;
+  s += `<circle cx="1340" cy="560" r="160" fill="#ffe08a" opacity=".55" filter="url(#${p}big)"/>`;
+  // Le quartier : immeubles, clocher, supermarché
+  let x = -10;
+  while (x < 1620){ const w = 70+r()*90, h = 120+r()*170, c = ['#3b2552','#462a5e','#33204a'][Math.floor(r()*3)];
+    s += `<rect x="${x.toFixed(0)}" y="${(640-h).toFixed(0)}" width="${w.toFixed(0)}" height="${h.toFixed(0)}" fill="${c}"/>`;
+    s += `<polygon points="${x-4},${640-h} ${x+w/2},${640-h-22} ${x+w+4},${640-h}" fill="#2a1a3c"/>`;
+    for (let yy=640-h+20; yy<620; yy+=34) for (let xx=x+12; xx<x+w-16; xx+=26) if (r()<.75) s += `<rect x="${xx.toFixed(0)}" y="${yy.toFixed(0)}" width="12" height="18" fill="${r()<.35?'#ffd27a':'#5a3d72'}"/>`;
+    x += w+4; }
+  s += `<g fill="#2a1a3c"><rect x="560" y="330" width="60" height="310"/><polygon points="552,330 590,200 628,330"/><rect x="587" y="170" width="6" height="34"/><rect x="578" y="180" width="24" height="5"/></g>`;
+  s += `<rect x="0" y="636" width="1600" height="18" fill="#2a1a3c"/>`;
+  s += `<rect x="0" y="652" width="1600" height="248" fill="url(#${p}road)"/>`;
+  s += `<g stroke="#ffd84a" stroke-width="8" opacity=".55">`; for (let xx=0; xx<1600; xx+=140) s += `<line x1="${xx}" y1="780" x2="${xx+70}" y2="780"/>`; s += `</g>`;
+  // Lignes de vitesse
+  s += `<g stroke="#fff" stroke-linecap="round" opacity=".35">`;
+  for (let i=0;i<16;i++){ const yy = 380+r()*260, x0 = 700+r()*300; s += `<line x1="${x0.toFixed(0)}" y1="${yy.toFixed(0)}" x2="${(x0+120+r()*160).toFixed(0)}" y2="${yy.toFixed(0)}" stroke-width="${(2+r()*3).toFixed(1)}"/>`; }
+  s += `</g>`;
+  // Tirs ennemis et explosions
+  const boom = (x,y,k) => { let pts=''; for (let i=0;i<16;i++){ const a=i*Math.PI/8, rr=(i%2?24:52)*k; pts += `${(x+Math.cos(a)*rr).toFixed(1)},${(y+Math.sin(a)*rr).toFixed(1)} `; }
+    return `<polygon points="${pts}" fill="#ffb23a" opacity=".9" filter="url(#${p}glow)"/><polygon points="${pts}" fill="#ffd84a"/><circle cx="${x}" cy="${y}" r="${18*k}" fill="#fff6d6"/>`; };
+  s += boom(1430,170,1.1) + boom(1080,120,.7) + boom(1480,330,.55);
+  for (const [bx,by] of [[1370,250],[1300,190],[1450,420],[1160,240],[1010,300],[1520,250],[960,180]]) s += `<circle cx="${bx}" cy="${by}" r="13" fill="#ff4d8b" stroke="#fff" stroke-width="4"/>`;
+  // Salve de biberons
+  const bib = (x,y,a) => `<g transform="translate(${x} ${y}) rotate(${a})"><rect x="-9" y="-20" width="18" height="34" rx="7" fill="#fff"/><rect x="-9" y="-4" width="18" height="5" fill="#8fd4ff"/><path d="M-6 -20 Q0 -36 6 -20 Z" fill="#ff9a3d"/></g>`;
+  for (const [bx,by] of [[1275,330],[1320,262],[1365,196],[1240,300],[1290,228],[1218,250]]) s += `<path d="M${bx-30} ${by+40} L${bx} ${by}" stroke="#ffe9a8" stroke-width="10" stroke-linecap="round" opacity=".5"/>` + bib(bx,by,38);
+  // Bonus doudou
+  s += `<g transform="translate(965 250)"><circle r="34" fill="#fff" opacity=".25" stroke="#fff" stroke-width="3"/><circle cx="-12" cy="-14" r="8" fill="#c98a5c"/><circle cx="12" cy="-14" r="8" fill="#c98a5c"/><circle cy="0" r="16" fill="#c98a5c"/><circle cy="18" r="14" fill="#c98a5c"/><circle cx="-5" cy="-2" r="2.5" fill="#2a1a10"/><circle cx="5" cy="-2" r="2.5" fill="#2a1a10"/></g>`;
+  // Poussette
+  s += `<g transform="translate(1180 520) rotate(-8) scale(1.3)">
+    <ellipse cx="0" cy="132" rx="150" ry="14" fill="#000" opacity=".35"/>
+    <path d="M-70 95 L-20 55 M75 95 L25 55" stroke="#2a1a3c" stroke-width="7" stroke-linecap="round"/>
+    ${[-70,75].map(x=>`<g transform="translate(${x} 95)"><circle r="33" fill="#1e1530" stroke="#ffd84a" stroke-width="4"/><circle r="22" fill="none" stroke="#5a4a9a" stroke-width="2"/>${[0,1,2,3,4,5].map(k=>`<line x1="0" y1="0" x2="${(Math.cos(k*Math.PI/3)*28).toFixed(1)}" y2="${(Math.sin(k*Math.PI/3)*28).toFixed(1)}" stroke="#8a79d0" stroke-width="2.5"/>`).join('')}<circle r="6" fill="#ffd84a"/></g>`).join('')}
+    <path d="M-120 0 L-170 -70" stroke="#2a1a3c" stroke-width="7" stroke-linecap="round"/><path d="M-182 -60 L-156 -82" stroke="#ffd84a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M-122 0 Q-122 62 -50 62 L72 62 Q112 62 112 0 Z" fill="#fdf4ff" stroke="#ffd84a" stroke-width="4"/>
+    <path d="M-106 26 H96" stroke="#ff4d8b" stroke-width="6" stroke-dasharray="14 8"/>
+    <path d="M-124 2 A104 104 0 0 1 -24 -100 L-24 2 Z" fill="#ff4d8b"/><path d="M-124 2 A104 104 0 0 1 -24 -100" fill="none" stroke="#ffd84a" stroke-width="4"/><path d="M-24 2 L-88 -78 M-24 2 L-114 -42" stroke="#d6336c" stroke-width="3"/>
+    <circle cx="20" cy="-14" r="17" fill="#ffe0cc"/><path d="M12 -18 l8 3 M28 -18 l-8 3" stroke="#5a2a1a" stroke-width="2.5" stroke-linecap="round"/><path d="M14 -6 q6 -4 12 0" stroke="#5a2a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M28 -30 q10 -14 2 -22" stroke="#7a4a2a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M-20 4 Q50 -22 112 2 Z" fill="#8fd4ff"/>
+    <g transform="translate(96 -24) rotate(-40)"><rect x="-8" y="-40" width="16" height="44" rx="4" fill="#3a3550" stroke="#ffd84a" stroke-width="2.5"/><circle cx="0" cy="-46" r="12" fill="#ffe9a8" filter="url(#${p}glow)"/></g>
+  </g>`;
+  return s;
+}
+
 /* ============================================================
    CONSTRUCTION DE LA PAGE
    ============================================================ */
@@ -583,6 +871,13 @@ tiles.innerHTML = GAMES.map(g=>`
     <div class="tx"><b>${g.univers.label}</b><span>${g.univers.sub} — ${g.name}</span></div>
     <span class="round solid go" aria-hidden="true">${I.play}</span>
   </a>`).join("");
+
+// Flèches de la rangée
+const prevB = document.querySelector(".arrow.prev"), nextB = document.querySelector(".arrow.next");
+function arrows(){ prevB.disabled = rail.scrollLeft < 8; nextB.disabled = rail.scrollLeft + rail.clientWidth > rail.scrollWidth - 8; }
+prevB.onclick = () => rail.scrollBy({left: -rail.clientWidth * .8});
+nextB.onclick = () => rail.scrollBy({left:  rail.clientWidth * .8});
+rail.addEventListener("scroll", arrows, {passive:true}); addEventListener("resize", arrows); arrows();
 
 // Carrousel
 const slides = [...hero.querySelectorAll(".slide")];
