@@ -2623,15 +2623,32 @@ $('eRetry').onclick=()=>startLevel(curLvl);$('eMenu').onclick=()=>{state='menu';
 $('pResume').onclick=()=>togglePause();$('pRestart').onclick=()=>startLevel(curLvl);$('pMenu').onclick=()=>{state='menu';paused=false;g=null;buildMenu();show('menu');};
 $('pBtn').onclick=()=>togglePause();
 for(const [k,r,o] of [['n','rN','tN'],['v','rV','tV'],['d','rD','tD']]){const R=$(r),O=$(o);R.value=Math.round(TUNE[k]*100);O.textContent=R.value+' %';R.oninput=()=>{TUNE[k]=R.value/100;if(g&&g.tn)g.tn[k]=Math.min(g.tn[k],TUNE[k]);O.textContent=R.value+' %';try{localStorage.setItem('templier3188_tune',JSON.stringify(TUNE));}catch(e){}};}$('title').onclick=()=>{initAudio();state='menu';buildMenu();show('menu');};
-// ================= musique (fichiers hildegarde1.mp3 … hildegarde12.mp3 à côté du jeu) =================
-const MUS={el:null,list:[],i:0,gain:null};
-(function(){try{for(let n=1;n<=16;n++)for(const x of ['mp3','m4a']){const src='hildegarde'+n+'.'+x,t=new Audio();t.preload='metadata';t.onloadedmetadata=()=>{if(!MUS.list.includes(src)){MUS.list.push(src);MUS.list.sort(()=>Math.random()-.5);}};t.src=src;}}catch(e){}})();
-function musicVol(){return muted?0:(state==='play'&&!paused?.32:.7);}
-function musicKick(){try{if(!MUS.list.length)return;
-  if(!MUS.el){const el=MUS.el=new Audio();el.preload='auto';el.onended=()=>{el.src=MUS.list[(++MUS.i)%MUS.list.length];el.play().catch(()=>{});};el.src=MUS.list[0];
-    try{if(AC){const n=AC.createMediaElementSource(el);MUS.gain=AC.createGain();n.connect(MUS.gain);MUS.gain.connect(AC.destination);}}catch(e){MUS.gain=null;}
-    setInterval(()=>{const v=musicVol();if(MUS.gain)MUS.gain.gain.value=v;else{try{el.volume=v;}catch(e){}el.muted=v===0;}},250);}
-  if(MUS.el.paused)MUS.el.play().catch(()=>{});}catch(e){}}
+// ================= musique : thème hors combat, deux morceaux de bataille en mission =================
+// Fichiers attendus à côté du jeu (ou dans ../, assets/, ../assets/) :
+//   « Templar 3188 theme.mp3 », « Templar Battle 1.mp3 », « Templar Battle 2.mp3 », « Templar Battle 3.mp3 »
+const MUS={thU:null,btU:[],th:null,bt:null,bi:0,timer:0};
+function mProbe(name,cb){const c=[name,'../'+name,'assets/'+name,'../assets/'+name].map(encodeURI);let k=0;
+  const t=()=>{if(k>=c.length)return;const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>cb(c[k]);a.onerror=()=>{k++;t();};a.src=c[k];};try{t();}catch(e){}}
+mProbe('Templar 3188 theme.mp3',u=>{MUS.thU=u;});
+mProbe('Templar Battle 1.mp3',u=>{MUS.btU.push(u);});
+mProbe('Templar Battle 2.mp3',u=>{MUS.btU.push(u);});
+mProbe('Templar Battle 3.mp3',u=>{MUS.btU.push(u);});
+function mTrack(u,loop){const x={el:new Audio(),g:null,v:0,unl:false};x.el.preload='auto';x.el.loop=loop;x.el.src=u;
+  try{if(AC){const n=AC.createMediaElementSource(x.el);x.g=AC.createGain();x.g.gain.value=0;n.connect(x.g);x.g.connect(AC.destination);}}catch(e){x.g=null;}return x;}
+function mSet(x,v){x.v=v;if(x.g)x.g.gain.value=v;else{try{x.el.volume=Math.min(1,v);}catch(e){}x.el.muted=v<.005;}}
+function mWant(){return state==='play'?'b':'t';}
+function mNextBattle(){const L=MUS.btU;if(!L.length||!MUS.bt)return;MUS.bi=(MUS.bi+1)%L.length;MUS.bt.el.src=L[MUS.bi];MUS.bt.el.play().catch(()=>{});}
+function mTick(){const w=mWant(),tT=(!muted&&w==='t')?.6:0,tB=(!muted&&w==='b')?(paused?.12:.42):0;
+  for(const [x,tg] of [[MUS.th,tT],[MUS.bt,tB]]){if(!x)continue;
+    if(tg>0&&x.el.paused){if(x===MUS.bt&&x.v<.01&&MUS.btU.length>1){MUS.bi=(Math.random()*MUS.btU.length)|0;x.el.src=MUS.btU[MUS.bi];}x.el.play().catch(()=>{});}
+    mSet(x,x.v+(tg-x.v)*.12);if(tg===0&&x.v<.01&&!x.el.paused){mSet(x,0);x.el.pause();}}}
+function musicKick(){try{
+  if(!MUS.th&&MUS.thU)MUS.th=mTrack(MUS.thU,true);
+  if(!MUS.bt&&MUS.btU.length){MUS.bt=mTrack(MUS.btU[0],false);MUS.bt.el.onended=mNextBattle;}
+  const w=mWant();for(const [x,k] of [[MUS.th,'t'],[MUS.bt,'b']]){if(!x||x.unl)continue;x.unl=true;mSet(x,0);
+    x.el.play().then(()=>{if(mWant()!==k){x.el.pause();}}).catch(()=>{x.unl=false;});}
+  if(!MUS.timer&&(MUS.th||MUS.bt))MUS.timer=setInterval(mTick,100);}catch(e){}}
+
 function setMute(m){muted=m;$('sndBtn').textContent=m?'Son · coupé':'Son · activé';$('muteBtn').textContent=m?'✕':'♪';}
 $('sndBtn').onclick=()=>{initAudio();setMute(!muted);};$('muteBtn').onclick=()=>{initAudio();setMute(!muted);};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play'&&!paused&&g&&!g.over)togglePause();});
