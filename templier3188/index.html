@@ -2625,26 +2625,32 @@ $('pBtn').onclick=()=>togglePause();
 for(const [k,r,o] of [['n','rN','tN'],['v','rV','tV'],['d','rD','tD']]){const R=$(r),O=$(o);R.value=Math.round(TUNE[k]*100);O.textContent=R.value+' %';R.oninput=()=>{TUNE[k]=R.value/100;if(g&&g.tn)g.tn[k]=Math.min(g.tn[k],TUNE[k]);O.textContent=R.value+' %';try{localStorage.setItem('templier3188_tune',JSON.stringify(TUNE));}catch(e){}};}$('title').onclick=()=>{initAudio();state='menu';buildMenu();show('menu');};
 // ================= musique : thème hors combat, deux morceaux de bataille en mission =================
 // Fichiers attendus à côté du jeu (ou dans ../, assets/, ../assets/) :
-//   « Templar 3188 theme.mp3 », « Templar Battle 1.mp3 », « Templar Battle 2.mp3 », « Templar Battle 3.mp3 »
-const MUS={thU:null,btU:[],th:null,bt:null,bi:0,timer:0};
+//   « Templar 3188 theme.mp3 », « Templar Battle 1/2/3.mp3 », « Templar Jerusalem 1/2.mp3 »
+const MUS={thU:null,btU:[],jeU:[],th:null,bt:null,last:null,timer:0};
 function mProbe(name,cb){const c=[name,'../'+name,'assets/'+name,'../assets/'+name].map(encodeURI);let k=0;
   const t=()=>{if(k>=c.length)return;const a=new Audio();a.preload='metadata';a.onloadedmetadata=()=>cb(c[k]);a.onerror=()=>{k++;t();};a.src=c[k];};try{t();}catch(e){}}
 mProbe('Templar 3188 theme.mp3',u=>{MUS.thU=u;});
 mProbe('Templar Battle 1.mp3',u=>{MUS.btU.push(u);});
 mProbe('Templar Battle 2.mp3',u=>{MUS.btU.push(u);});
 mProbe('Templar Battle 3.mp3',u=>{MUS.btU.push(u);});
+mProbe('Templar Jerusalem 1.mp3',u=>{MUS.jeU.push(u);});
+mProbe('Templar Jerusalem 2.mp3',u=>{MUS.jeU.push(u);});
+// Jérusalem (acte IV et Jérusalem céleste) : morceaux « Jerusalem » ; ailleurs : « Battle ». Tirage au hasard, jamais deux fois le même d'affilée.
+function mList(){const jer=g&&g.L&&(g.L.act===3||g.L.type==='V');return jer&&MUS.jeU.length?MUS.jeU:MUS.btU.length?MUS.btU:MUS.jeU;}
+function mPick(){const L=mList();if(!L.length)return null;let c=L.filter(u=>u!==MUS.last);if(!c.length)c=L;const u=c[(Math.random()*c.length)|0];MUS.last=u;return u;}
 function mTrack(u,loop){const x={el:new Audio(),g:null,v:0,unl:false};x.el.preload='auto';x.el.loop=loop;x.el.src=u;
   try{if(AC){const n=AC.createMediaElementSource(x.el);x.g=AC.createGain();x.g.gain.value=0;n.connect(x.g);x.g.connect(AC.destination);}}catch(e){x.g=null;}return x;}
 function mSet(x,v){x.v=v;if(x.g)x.g.gain.value=v;else{try{x.el.volume=Math.min(1,v);}catch(e){}x.el.muted=v<.005;}}
 function mWant(){return state==='play'?'b':'t';}
-function mNextBattle(){const L=MUS.btU;if(!L.length||!MUS.bt)return;MUS.bi=(MUS.bi+1)%L.length;MUS.bt.el.src=L[MUS.bi];MUS.bt.el.play().catch(()=>{});}
+function mNextBattle(){const u=mPick();if(!u||!MUS.bt)return;MUS.bt.el.src=u;MUS.cur=u;MUS.bt.el.play().catch(()=>{});}
 function mTick(){const w=mWant(),tT=(!muted&&w==='t')?.6:0,tB=(!muted&&w==='b')?(paused?.12:.42):0;
+  if(MUS.bt&&tB>0&&MUS.cur&&!mList().includes(MUS.cur)){const u=mPick();if(u){MUS.bt.el.src=u;MUS.cur=u;MUS.bt.el.play().catch(()=>{});}}
   for(const [x,tg] of [[MUS.th,tT],[MUS.bt,tB]]){if(!x)continue;
-    if(tg>0&&x.el.paused){if(x===MUS.bt&&x.v<.01&&MUS.btU.length>1){MUS.bi=(Math.random()*MUS.btU.length)|0;x.el.src=MUS.btU[MUS.bi];}x.el.play().catch(()=>{});}
+    if(tg>0&&x.el.paused){if(x===MUS.bt&&x.v<.01){const u=mPick();if(u){x.el.src=u;MUS.cur=u;}}x.el.play().catch(()=>{});}
     mSet(x,x.v+(tg-x.v)*.12);if(tg===0&&x.v<.01&&!x.el.paused){mSet(x,0);x.el.pause();}}}
 function musicKick(){try{
   if(!MUS.th&&MUS.thU)MUS.th=mTrack(MUS.thU,true);
-  if(!MUS.bt&&MUS.btU.length){MUS.bt=mTrack(MUS.btU[0],false);MUS.bt.el.onended=mNextBattle;}
+  if(!MUS.bt&&(MUS.btU.length||MUS.jeU.length)){MUS.bt=mTrack((MUS.cur=MUS.btU[0]||MUS.jeU[0]),false);MUS.bt.el.onended=mNextBattle;}
   const w=mWant();for(const [x,k] of [[MUS.th,'t'],[MUS.bt,'b']]){if(!x||x.unl)continue;x.unl=true;mSet(x,0);
     x.el.play().then(()=>{if(mWant()!==k){x.el.pause();}}).catch(()=>{x.unl=false;});}
   if(!MUS.timer&&(MUS.th||MUS.bt))MUS.timer=setInterval(mTick,100);}catch(e){}}
