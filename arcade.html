@@ -44,7 +44,12 @@
   .slide.on{opacity:1;visibility:visible;transition:opacity 1s ease}
   .slide .art{position:absolute;inset:0;z-index:-2}
   .slide .art svg{width:100%;height:100%}
-  .slide.on .art svg{animation:kb 16s ease-out both}
+  .slide.on .art svg,.slide.on .art img{animation:kb 16s ease-out both}
+  .art img,.m-art > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%;display:block}
+  @media (min-width:761px){
+    .slide .art.has-img{left:24%}
+    .slide .art.has-img img{object-position:50% 30%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 26%);mask-image:linear-gradient(90deg,transparent 0,#000 26%)}
+  }
   @keyframes kb{from{transform:scale(1.07)}to{transform:scale(1)}}
   .slide::before{content:"";position:absolute;inset:0;z-index:-1;
     background:
@@ -186,6 +191,7 @@
   @keyframes pop{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
   .m-art{position:relative;aspect-ratio:16/9}
   .m-art > svg{position:absolute;inset:0;width:100%;height:100%}
+  .m-art > img{object-position:50% 25%}
   .m-art::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#141418 0%,rgba(20,20,24,0) 55%)}
   .m-head{position:absolute;left:clamp(18px,4vw,44px);bottom:clamp(14px,3vw,30px);z-index:2}
   .m-head .hero-title{margin-bottom:16px}
@@ -295,7 +301,7 @@ const GAMES = [
   },
   {
     id: "poussette",
-    url: "poussetteceleste.html",
+    url: "poussette-celeste.html",
     title: '<span class="t-pous">Céleste<em>Poussette de combat</em></span>',
     name: "Céleste : Poussette de combat",
     genre: "Shoot'em up",
@@ -353,7 +359,8 @@ const GAMES = [
   },
   {
     id: "templier3188",
-    url: "templier3188.html",
+    url: "templier3188/",
+    img: "templier3188/accueil.jpg",
     title: '<span class="t-temp">TEMPLIER<b>3188</b></span>',
     name: "Templier 3188",
     genre: "Shooter twin-stick",
@@ -397,6 +404,9 @@ let UID = 0;
 function svg(sceneFn, viewBox, par){
   const p = "s" + (UID++) + "_";
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" preserveAspectRatio="${par||'xMidYMid slice'}" aria-hidden="true">${sceneFn(p)}</svg>`;
+}
+function art(g, vb, par, eager){
+  return g.img ? `<img src="${g.img}" alt="" ${eager?'':'loading="lazy"'} decoding="async">` : svg(g.scene, vb, par);
 }
 const POSTER_VB = "900 0 600 900";   // recadrage 2:3 centré sur le sujet
 const WIDE_VB   = "0 0 1600 900";
@@ -828,7 +838,7 @@ const heroVB = () => narrow() ? "830 0 740 900" : WIDE_VB;
 // Hero
 hero.innerHTML = GAMES.map((g,i)=>`
   <article class="slide${i===0?' on':''}" data-i="${i}" aria-hidden="${i!==0}">
-    <div class="art">${svg(g.scene, heroVB(), narrow()?'xMidYMid slice':'xMaxYMid slice')}</div>
+    <div class="art${g.img?' has-img':''}">${art(g, heroVB(), narrow()?'xMidYMid slice':'xMaxYMid slice', i===0)}</div>
     <div class="hero-copy">
       <div class="kicker"><i style="background:${g.accent}"></i>${g.genre}</div>
       <h1 class="hero-title">${g.title}</h1>
@@ -847,7 +857,7 @@ rail.innerHTML = GAMES.map((g,i)=>`
   <div class="slot">
     <span class="rank" aria-hidden="true">${i+1}</span>
     <div class="poster" role="button" tabindex="0" data-open="${i}" aria-label="${g.name} — ${g.genre}">
-      <div class="art">${svg(g.scene, POSTER_VB)}</div>
+      <div class="art">${art(g, POSTER_VB)}</div>
       <span class="f" aria-hidden="true">F</span>
       ${g.badge?`<span class="badge">${g.badge}</span>`:""}
       <div class="ptitle">${g.title}</div>
@@ -867,7 +877,7 @@ rail.innerHTML = GAMES.map((g,i)=>`
 // Tuiles « par envie »
 tiles.innerHTML = GAMES.map(g=>`
   <a class="tile" href="${g.url}">
-    <div class="art">${svg(g.scene, "560 0 1040 585")}</div>
+    <div class="art">${art(g, "560 0 1040 585")}</div>
     <div class="tx"><b>${g.univers.label}</b><span>${g.univers.sub} — ${g.name}</span></div>
     <span class="round solid go" aria-hidden="true">${I.play}</span>
   </a>`).join("");
@@ -909,7 +919,7 @@ addEventListener("resize",()=>{ const n = narrow(); if (n===wasNarrow) return; w
 function openGame(i){
   const g = GAMES[i];
   modal.innerHTML = `
-    <div class="m-art">${svg(g.scene, "400 0 1200 675")}
+    <div class="m-art">${art(g, "400 0 1200 675", null, true)}
       <button class="round m-close" aria-label="Fermer">${I.close}</button>
       <div class="m-head">
         <div class="hero-title">${g.title}</div>
